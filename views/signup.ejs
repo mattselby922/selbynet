@@ -1,0 +1,48 @@
+<html>
+<head>
+  <meta name="page" content="createAcct.html">
+  <meta name="author" content="Matt Selby">
+  <meta name="description" content=
+
+              "Selbynet was developed as part of a
+  capstone project at SUNY Polytechnic University, in Spring of 2021,
+              under the supervision of Scott Spetka.">
+
+  <link rel="stylesheet" href="signup.css">
+  <link href='https://fonts.googleapis.com/css?family=Alatsi' rel='stylesheet'>
+</head>
+<header>
+  <a href="/"><img class="logo" src="selbynetlogo2.png" alt="Click to return to the Homepage"/></a>
+</header>
+<body>
+  <h1>New To Selbynet?</h1>
+  <h2>Create Your Account Here</h2>
+
+    <form action="/success" method="POST">
+      <label for="username">Username</label>
+      <input type="text" placeholder="Username" name="username" size="25" required><br>
+
+      <label for="password">Password</label>
+      <input type="password" placeholder="Password" name="password" id="passwordInput" size="25" required>
+      <input type="checkbox" onclick="passwordVisibility()" >Show password<br>
+
+      <label for="interests">Interests/Hobbies</label>
+      <input type="text" placeholder ="" name="interests"><br>
+
+      <button type="submit" class="createAcctButton">Done</button>
+</body>
+
+<script>
+//TOGGLE PASSWORD VISIBILITY
+function passwordVisibility(){
+  var input = document.getElementById('passwordInput');
+  if(input.type === 'password'){
+    input.type = 'text';
+  }
+  else if(input.type === 'text'){
+    input.type = 'password';
+  }
+}
+</script>
+
+
