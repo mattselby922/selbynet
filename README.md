@@ -13,7 +13,7 @@ Tools Used:
 - EJS [template engine]
 
 Resources: 
-https://www.mongodb.com/blog/post/quick-start-nodejs-mongodb--how-to-get-connected-to-your-database
-https://www.tutorialsteacher.com/nodejs/access-mongodb-in-nodejs
-https://socket.io/docs/v4/index.html
-https://www.youtube.com/watch?v=jD7FnbI76Hg
+- https://www.mongodb.com/blog/post/quick-start-nodejs-mongodb--how-to-get-connected-to-your-database
+- https://www.tutorialsteacher.com/nodejs/access-mongodb-in-nodejs
+- https://socket.io/docs/v4/index.html
+- https://www.youtube.com/watch?v=jD7FnbI76Hg
