@@ -68,7 +68,7 @@ input:focus{
 
 body{
   font-family:"Alatsi";
-  background: linear-gradient(to bottom, #F8B195, #F67280, #C06C84, #6C5B7B, #355C7D);
+  background: linear-gradient(to bottom, 	#d6fbff, #b4f7ff, 	#8fddff, #79c8ff, 	#6aa4ff);
   background-size: 100%;
 }
 
@@ -83,4 +83,19 @@ body:before{
 
   margin:0px;
   padding:0px;
+}
+
+.chatBox{
+  display: block;
+  padding: 20px;
+  background-color: white;
+  font-size: 28px;
+
+  margin-right: auto;
+  margin-left: auto;
+  align-content: center;
+  width:35%;
+
+  border-radius: 50px;
+  box-shadow: 0 3px 26px 0 rgba(0,0,0,0.20);
 }

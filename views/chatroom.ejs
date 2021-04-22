@@ -1,0 +1,39 @@
+<html>
+<head>
+  <meta name="page" content="chatroom.ejs">
+  <meta name="author" content="Matt Selby">
+  <meta name="description" content=
+
+              "Selbynet was developed as part of a
+  capstone project at SUNY Polytechnic University, in Spring of 2021,
+              under the supervision of Scott Spetka.">
+
+  <link rel="stylesheet" href="signup.css">
+  <link href='https://fonts.googleapis.com/css?family=Alatsi' rel='stylesheet'>
+</head>
+<header>
+    <a href="/"><img class="logo" src="/selbynetlogo2.png" alt="Click to return to the Homepage"/></a>
+</header>
+
+<body>
+    <!-- Chatbox body (where all messages will be displayed) -->
+    <div class="chatBox">
+      Welcome to the Selbynet chatroom!
+    </div>
+
+    <!-- Form for user to enter their message -->
+    <div class="chatMessages">
+        <form id="chatBoxForm">
+            <input
+            id="msg"
+            placeholder="Type a message..."
+            required
+            autocomplete="off"/>
+            <button>Send Message</button>
+        </form>
+    </div>
+
+
+    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+    <script src="/chat.js"></script>
+</body>

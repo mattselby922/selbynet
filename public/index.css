@@ -6,7 +6,7 @@ html{
   display: block;
   white-space: nowrap;
   overflow: hidden;
-  background-color: #F8B195;
+  background-color: #bbdfff;
 
   padding-top:20px;
   padding-bottom:20px;
@@ -29,12 +29,12 @@ html{
   margin-left: 50px;
   margin-right: 50px;
 
-  padding-left: 45px;
-  padding-right: 45px;
-  padding-bottom: 15px;
-  padding-top: 15px;
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-bottom: 10px;
+  padding-top: 10px;
 
-  background-color: #F67280;
+  background-color: #31a3f0;
   border: 2px solid black;
   border-radius: 20px;
 
@@ -96,7 +96,7 @@ html{
 .h1{
   font-family: 'Alatsi', serif;
   font-size: 64px;
-  text-shadow: 1px 1px #558abb;
+  text-shadow: 2px 2px #525252;
   text-align: center;
   margin-top: 15px;
   padding-top: 20px;
@@ -121,7 +121,7 @@ html{
 
 body{
   font-family:"Alatsi";
-  background: linear-gradient(to bottom, #F8B195, #F67280, #C06C84, #6C5B7B, #355C7D);
+  background: linear-gradient(to right, #F8B195, #F67280, #C06C84, #6C5B7B, #355C7D);
   background-size: 100%;
 }
 
@@ -152,7 +152,5 @@ body:before{
 
   padding-top: 0px;
   padding-bottom:20px;
-
-
 
 }

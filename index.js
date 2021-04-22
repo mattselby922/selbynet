@@ -1,50 +1,132 @@
+/*
+Author: Matt Selby
+Resources: 
+https://www.mongodb.com/blog/post/quick-start-nodejs-mongodb--how-to-get-connected-to-your-database
+https://www.tutorialsteacher.com/nodejs/access-mongodb-in-nodejs
+
+              "Selbynet was developed as part of a
+  capstone project at SUNY Polytechnic University, in Spring of 2021,
+              under the supervision of Scott Spetka.">
+*/
+
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
 
 const express = require('express');
-const socketio = require('socket.io');
+
 const http = require('http');
 const path = require('path');
 const app = express();
-const bodyParser = require('body-parser');
+
+// Previously, was getting 404 error (socket.io does not exist). This fixed the problem; Socket.io server listens to HTTP server, 
+// and automatically serves client file 
+var server = http.createServer(app);
+const socketio = require('socket.io');
+const io = socketio(server);
+
 const router = express.Router();
-const port = 3000;
+const users = require('./routes/users');
+const mongoose = require('mongoose');
+
+server.listen(process.env.PORT || 3000)
 
 //EJS
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+
+
 //EXPRESS, looks at body of request for easy access to user-submitted data
 app.use(express.urlencoded({extended: false}));
 app.use(express.static('public'))
 
-const mongoose = require('mongoose');
+app.use(express.json());
+app.use('/api/users', users);
 
-// Database Name
-const dbName = 'selbynet';
+
+
+
+
 
 //MongoDB
 const MongoClient = require('mongodb').MongoClient;
-const assert = require('assert');
 
-// Connection URL
-const url = 'mongodb://localhost:27017/selbynet';
 
-// Connecting to MongoDB
-//mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true});
-mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser: true, useUnifiedTopology: true});
+//main(), Connecting to Atlas Cluster, printing list of databases
+//Based on MongoDB Start Guide: https://www.mongodb.com/blog/post/quick-start-nodejs-mongodb--how-to-get-connected-to-your-database
+async function main(){
+  const uri = "mongodb+srv://matt:idtUw3UUukmqwa3@cluster0.bhocy.mongodb.net/selbynet?retryWrites=true&w=majority";
+  const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  
 
-const db = mongoose.connection;
-db.once('open', _ =>{
-  console.log('Connected to Selbynet MongoDB:', url);
+  try{
+      await client.connect();           //connect to atlas cluster
+      await listDatabases(client);      //list databases  
+      //await listCollections(client);  //list collections
+      //const selbynet = client.db("selbynet");
+    }catch(e){
+      console.error(e);
+    } finally{
+      await client.close();
+    }
+}
+
+main().catch(console.error);
+
+//Function to list all databases on cluster
+async function listDatabases(client){
+  databasesList = await client.db().admin().listDatabases();
+  console.log("Databases:");
+  databasesList.databases.forEach(db => console.log(` - ${db.name}`));
+}
+// Opening model connection (mongoose)
+mongoose.connect("mongodb+srv://matt:idtUw3UUukmqwa3@cluster0.bhocy.mongodb.net/selbynet?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true});
+
+
+// Define user schema w/mongoose
+const userSchema = new mongoose.Schema({
+  username: String,
+  email: String,
+  password: String,
+  interests: String
 });
 
-db.on('error', err =>{
-  console.error('There was a problem connecting to the database:', err);
+// Compiling schema into a model
+const user = mongoose.model('users', userSchema);
+
+
+
+
+
+
+
+
+// Server-side SocketIO Implementation
+
+//Connection Listener
+io.on('connection', socket =>{
+  
+  //Emitter for welcomeMessage
+  socket.emit('welcomeMessage', 'Try sending a message to other users!');
+  
+  //Listening for chat message
+  socket.on('chatMessage', msg=>{
+    io.emit('message', msg);
+  });
+  
+  //Let everyone know that someone has connected 
+  socket.broadcast.emit('message', 'Someone has connected.')
+  //Let everyone know that someone has disconnected
+  socket.on('disconnect', ()=>{
+    io.emit('message', 'Someone has left.');
+  });
 });
 
 
+
+
+//ROUTING POST AND GET REQUESTS
 //serve static files (html, css, images, .js)
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -54,59 +136,64 @@ app.get('/', (req, res) => {
 });
 
 
-//render signup.ejs view when get/signup
-app.post('/signup', (req, res) =>{
-  res.render('signup.ejs');
+app.post('/index.js', async(client,res)=>{
+  //Checking if user exists in DB
+  /*let user = await client.db.collection(users).findOne({email: req.body.email});
+  if(user){
+      return res.status(400).send('User already exists')
+  } // else create a user document
+  else{
+        const newUser = new user({
+          username: req.body.name,
+          email: req.body.email,
+          password: req.body.password,
+          interests: req.body.interests
+          
+        })
+        console.log(newUser.username);
+      }*/
+        const newUser = new user({
+        username: client.body.username,
+        email: client.body.email,
+        password: client.body.password,
+        interests: client.body.interests
+        
+      })
+      //newUser.save().then(() => console.log('Username for newly created user: ', newUser.username));
+      console.log('Username for newly created user: ', newUser.username);
+      console.log('Email for newly created user: ', newUser.email);
+      // Save new user in Mongo 'users' collection of Selbynet database
+      newUser.save(function (err){
+        if(err) return console.error(err);
+      }) //user saved :]
 });
+  
 
-app.listen(process.env.PORT || 3000)
-
-//Connect to localhost port
-/*app.listen(port,() =>{
-  console.log(`Listening on port ${port}`);
+  //const selbynetDB = client.db(selbynet);
+  //const usersCollection = client.collection("users");
+/*
+   client.selbynetDB.collection(usersCollection).insert({
+        username: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
+        interests: req.body.interests
+      })
 });*/
+
+//When user logs in
+app.post('/login', async(client,res)=>{
+
+})
+
   app.get('/profile', (req,res)=>{
     res.render('profile.ejs');
   })
-  //Upon click "Create Account" Button...
+  //Upon click "Create Account" Button, render signup.ejs
   app.get('/signup', (req, res)=>{
     res.render('signup.ejs');
   });
 
-  //User inputs data
-  app.post('/success', (req,res)=>{
-    res.redirect('/success.html');
-    var username = req.fields.username;
-    var password = req.fields.password;
-    var interests = req.fields.interests;
-
-    //Check if username exists
-    database.collection('users').findOne({
-      $or: [{
-        'username': username
-      }]
-    }, function (error, user) {
-      //if username does exist, hash password
-      if(user == null) {
-        bcrypt.hash(password, 10, function (error, hash){
-          database.collection('users').insertOne({
-            'username': username,
-            'password': password,
-            'interests': interests,
-            'avatar': '',
-            'location': ''
-          }, function (error, data){
-            result.json({
-              'status': 'success',
-              'message': 'You have successfully created an account for Selbynet.'
-            });
-          });
-        });
-      } else{
-        result.json({
-          'staus': 'error',
-          'message': 'Username already exists.'
-        });
-      }
-    });
+  //Upon click "Join the chatroom" Button, render chatroom.ejs
+  app.get('/chatroom', (req, res)=>{
+    res.render('chatroom.ejs');
   });

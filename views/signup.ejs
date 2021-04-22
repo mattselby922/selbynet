@@ -9,21 +9,25 @@
               under the supervision of Scott Spetka.">
 
   <link rel="stylesheet" href="signup.css">
+  
   <link href='https://fonts.googleapis.com/css?family=Alatsi' rel='stylesheet'>
 </head>
 <header>
-  <a href="/"><img class="logo" src="selbynetlogo2.png" alt="Click to return to the Homepage"/></a>
+  <a href="/" ><img class="logo" src="selbynetlogo2.png" alt="Click to return to the Homepage"></a>
 </header>
 <body>
   <h1>New To Selbynet?</h1>
   <h2>Create Your Account Here</h2>
 
-    <form action="/success" method="POST">
+    <form action="/index.js" method="POST">
       <label for="username">Username</label>
-      <input type="text" placeholder="Username" name="username" size="25" required><br>
+      <input type="text" placeholder="Username" name="username" size="25" autocomplete="off" required><br>
+
+      <label for="email">Email</label>
+      <input type="email" placeholder="Email" name="email" required><br>
 
       <label for="password">Password</label>
-      <input type="password" placeholder="Password" name="password" id="passwordInput" size="25" required>
+      <input type="password" placeholder="Password" name="password" id="passwordInput" size="25" autocomplete="off" required>
       <input type="checkbox" onclick="passwordVisibility()" >Show password<br>
 
       <label for="interests">Interests/Hobbies</label>
