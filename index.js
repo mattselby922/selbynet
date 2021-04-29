@@ -19,6 +19,11 @@ const http = require('http');
 const path = require('path');
 const app = express();
 
+// bcypt
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
+
 // Previously, was getting 404 error (socket.io does not exist). This fixed the problem; Socket.io server listens to HTTP server, 
 // and automatically serves client file 
 var server = http.createServer(app);
@@ -31,13 +36,13 @@ const mongoose = require('mongoose');
 
 server.listen(process.env.PORT || 3000)
 
-//EJS
+// EJS
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 
 
-//EXPRESS, looks at body of request for easy access to user-submitted data
+// EXPRESS, looks at body of request for easy access to user-submitted data
 app.use(express.urlencoded({extended: false}));
 app.use(express.static('public'))
 
@@ -46,25 +51,22 @@ app.use('/api/users', users);
 
 
 
-
-
-
 //MongoDB
 const MongoClient = require('mongodb').MongoClient;
 
 
-//main(), Connecting to Atlas Cluster, printing list of databases
-//Based on MongoDB Start Guide: https://www.mongodb.com/blog/post/quick-start-nodejs-mongodb--how-to-get-connected-to-your-database
+// main(), Connecting to Atlas Cluster, printing list of databases
+// Based on MongoDB Start Guide: https://www.mongodb.com/blog/post/quick-start-nodejs-mongodb--how-to-get-connected-to-your-database
 async function main(){
   const uri = "mongodb+srv://matt:idtUw3UUukmqwa3@cluster0.bhocy.mongodb.net/selbynet?retryWrites=true&w=majority";
   const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   
 
   try{
-      await client.connect();           //connect to atlas cluster
-      await listDatabases(client);      //list databases  
-      //await listCollections(client);  //list collections
-      //const selbynet = client.db("selbynet");
+      await client.connect();            // connect to atlas cluster
+      await listDatabases(client);       // list databases  
+      // await listCollections(client);  // list collections
+      // const selbynet = client.db("selbynet");
     }catch(e){
       console.error(e);
     } finally{
@@ -96,28 +98,22 @@ const userSchema = new mongoose.Schema({
 const user = mongoose.model('users', userSchema);
 
 
-
-
-
-
-
-
 // Server-side SocketIO Implementation
 
-//Connection Listener
+// Connection Listener
 io.on('connection', socket =>{
   
-  //Emitter for welcomeMessage
+  // Emitter for welcomeMessage
   socket.emit('welcomeMessage', 'Try sending a message to other users!');
   
-  //Listening for chat message
+  // Listening for chat message
   socket.on('chatMessage', msg=>{
     io.emit('message', msg);
   });
   
-  //Let everyone know that someone has connected 
+  // Let everyone know that someone has connected 
   socket.broadcast.emit('message', 'Someone has connected.')
-  //Let everyone know that someone has disconnected
+  // Let everyone know that someone has disconnected
   socket.on('disconnect', ()=>{
     io.emit('message', 'Someone has left.');
   });
@@ -126,8 +122,8 @@ io.on('connection', socket =>{
 
 
 
-//ROUTING POST AND GET REQUESTS
-//serve static files (html, css, images, .js)
+// ROUTING POST AND GET REQUESTS
+// serve static files (html, css, images, .js)
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
@@ -135,65 +131,51 @@ app.get('/', (req, res) => {
   res.redirect('/index');
 });
 
-
+// User creation form posted 
 app.post('/index.js', async(client,res)=>{
-  //Checking if user exists in DB
-  /*let user = await client.db.collection(users).findOne({email: req.body.email});
-  if(user){
-      return res.status(400).send('User already exists')
-  } // else create a user document
-  else{
-        const newUser = new user({
-          username: req.body.name,
-          email: req.body.email,
-          password: req.body.password,
-          interests: req.body.interests
-          
-        })
-        console.log(newUser.username);
-      }*/
-        const newUser = new user({
-        username: client.body.username,
-        email: client.body.email,
-        password: client.body.password,
-        interests: client.body.interests
+  
+        // bcrypt hashing
+        const salt = await bcrypt.genSalt(saltRounds);
+        const hashedPassword = await bcrypt.hash(client.body.password, salt);
         
-      })
-      //newUser.save().then(() => console.log('Username for newly created user: ', newUser.username));
-      console.log('Username for newly created user: ', newUser.username);
-      console.log('Email for newly created user: ', newUser.email);
-      // Save new user in Mongo 'users' collection of Selbynet database
-      newUser.save(function (err){
-        if(err) return console.error(err);
-      }) //user saved :]
+          // create user model
+          const newUser = new user({
+            username: client.body.username,
+            email: client.body.email,
+            password: hashedPassword,
+            interests: client.body.interests   
+            })
+
+          // Save new user in Mongo 'users' collection of Selbynet database
+          newUser.save(function (err){
+          if(err) return console.error(err);
+          
+            }); // user saved! :]
+            
+            console.log('Username for newly created user: ', newUser.username);
+            console.log('Email for newly created user: ', newUser.email);
+            console.log('Salt: ', salt);
+            console.log('Hashed Password: ', hashedPassword);
+
 });
   
 
-  //const selbynetDB = client.db(selbynet);
-  //const usersCollection = client.collection("users");
-/*
-   client.selbynetDB.collection(usersCollection).insert({
-        username: req.body.name,
-        email: req.body.email,
-        password: req.body.password,
-        interests: req.body.interests
-      })
-});*/
 
-//When user logs in
+// When user logs in
 app.post('/login', async(client,res)=>{
-
+  // identify user credentials
 })
 
-  app.get('/profile', (req,res)=>{
-    res.render('profile.ejs');
-  })
-  //Upon click "Create Account" Button, render signup.ejs
-  app.get('/signup', (req, res)=>{
-    res.render('signup.ejs');
-  });
+app.get('/profile', (req,res)=>{
+  res.render('profile.ejs');
+})
 
-  //Upon click "Join the chatroom" Button, render chatroom.ejs
-  app.get('/chatroom', (req, res)=>{
-    res.render('chatroom.ejs');
-  });
+// Upon click "Create Account" Button, render signup.ejs
+app.get('/signup', (req, res)=>{
+  res.render('signup.ejs');
+});
+
+// Upon click "Join the chatroom" Button, render chatroom.ejs
+app.get('/chatroom', (req, res)=>{
+  res.render('chatroom.ejs');
+});
