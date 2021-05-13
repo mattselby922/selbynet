@@ -1,0 +1,159 @@
+html{
+    background-position: center 120px;
+  }
+  
+  .navbar{
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    background-color: #bbdfff;
+  
+    padding-top:20px;
+    padding-bottom:20px;
+    padding-right:20px;
+    padding-left:20px;
+  
+    margin-left: 160px;
+    margin-right: 160px;
+    margin-top:100px;
+  
+    border-radius: 50px;
+    box-shadow: 0 3px 26px 0 rgba(0,0,0,0.20);
+  
+  }
+  .navbar a{
+    text-decoration: none;
+    color: black;
+    font-size: 30px;
+  
+    margin-left: 50px;
+    margin-right: 50px;
+  
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+  
+    background-color: #31a3f0;
+    border: 2px solid black;
+    border-radius: 20px;
+  
+    float: left;
+  
+  }
+  .navbar a:hover{
+    background-color:pink;
+  }
+  
+  .navbar .navButtons{
+  
+    float:left;
+    display: inline;
+  
+    margin-top: 0px;
+  
+  }
+  
+  
+  .navbar input[type=text]{
+    padding:20px;
+  
+  
+    margin-right: 10px;
+    padding-bottom: 15px;
+    padding-top: 10px;
+    font-size: 28px;
+    border: none;
+    width: 300px;
+    height: 20px;
+    border-radius: 25px;
+    float: right;
+  
+  }
+  
+  .navbar .loginbutton{
+    font-weight: bolder;
+    padding: 15px;
+    font-size: 20px;
+    border-radius: 200px;
+    cursor: pointer;
+    float: right;
+  }
+  .navbar .createAcctButton{
+    float: right;
+    font-weight: bolder;
+    margin-right: 10px;
+    padding: 15px;
+    font-size: 20px;
+    border-radius: 200px;
+    cursor: pointer;
+  }
+  
+  .navbar input[type=text]{
+    border: 1px solid;
+  }
+  
+  .h1{
+    font-family: 'Alatsi', serif;
+    font-size: 64px;
+    text-shadow: 2px 2px #525252;
+    text-align: center;
+    margin-top: 15px;
+    padding-top: 20px;
+  
+  }
+  
+  .h2{
+    font-size: 36px;
+    text-align: center;
+  }
+  
+  .logo{
+    align-content: left;
+    float:left;
+    margin-top: 0;
+    margin: 0;
+    padding-top: 0;
+    position: absolute;
+    width: 100px; 
+    height: 100px;
+  }
+  
+  body{
+    font-family:"Alatsi";
+    background: linear-gradient(to right, #a8ff78, #78ffd6);
+    background-size: 100%;
+  }
+  
+  body:before{
+    content:'';
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: -1;
+    background: linear-gradient(to top bottom, rgba(255,255,255,0.2), #355C7D 75%);
+  
+    margin:0px;
+    padding:0px;
+  }
+  
+  .content{
+    text-align: left;
+    font-size: 22px;
+    background-color: #ffffff;
+    border-color: black;
+    border-radius: 50px;
+    box-shadow: 0 3px 26px 0 rgba(0,0,0,0.20);
+  
+    margin-left: 160px;
+    margin-right: 160px;
+    margin-top:100px;
+  
+    padding-top: 0px;
+    padding-bottom:20px;
+    padding-left: 20px;
+    padding-right: 20px;
+  
+  }
+  

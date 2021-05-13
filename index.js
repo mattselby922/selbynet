@@ -53,6 +53,7 @@ app.use('/api/users', users);
 
 //MongoDB
 const MongoClient = require('mongodb').MongoClient;
+const { User } = require('./models/user');
 
 
 // main(), Connecting to Atlas Cluster, printing list of databases
@@ -110,7 +111,7 @@ io.on('connection', socket =>{
   socket.on('chatMessage', msg=>{
     io.emit('message', msg);
   });
-  
+
   // Let everyone know that someone has connected 
   socket.broadcast.emit('message', 'Someone has connected.')
   // Let everyone know that someone has disconnected
@@ -162,9 +163,28 @@ app.post('/index.js', async(client,res)=>{
 
 
 // When user logs in
-app.post('/login', async(client,res)=>{
+app.post('/login', async(req,res)=>{
   // identify user credentials
+  var username = req.body.username;
+  var password = req.body.password;
+
+  user.findOne({username: username, password: password}), function(err, user){
+    if(err){
+      console.log(err);
+      return res.status(500).send();
+    }
+
+    if(!user){
+      return res.status(404).send();
+    }
+    return res.status(200).send();
+  }
 })
+
+// Upon click "Other Stuff" Button, render otherstuff.ejs
+app.get('/otherstuff', (req, res)=>{
+  res.render('otherstuff.ejs');
+});
 
 app.get('/profile', (req,res)=>{
   res.render('profile.ejs');
@@ -178,4 +198,9 @@ app.get('/signup', (req, res)=>{
 // Upon click "Join the chatroom" Button, render chatroom.ejs
 app.get('/chatroom', (req, res)=>{
   res.render('chatroom.ejs');
+});
+
+// Upon click "Join the video chat" Button, render videochat.ejs
+app.get('/videochat', (req, res)=>{
+  res.render('videochat.ejs');
 });

@@ -53,7 +53,33 @@ html{
   margin-top: 0px;
 
 }
+#navButtons2{
+  align-content: center;
+}
 
+.navButtons2 a{
+  text-decoration: none;
+  color: black;
+  font-size: 30px;
+  margin-left: 50px;
+  margin-right: 0px;
+
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+
+  background-color: #31f097;
+  border: 2px solid black;
+  border-radius: 20px;
+
+  float: left;
+
+}
+
+.navButtons2 a:hover{
+  background-color:rgb(175, 238, 208);
+}
 
 .navbar input[type=text]{
   padding:20px;
@@ -139,7 +165,7 @@ body:before{
 }
 
 .content{
-  text-align: center;
+  text-align: left;
   font-size: 22px;
   background-color: #ffecec;
   border-color: black;
@@ -152,5 +178,7 @@ body:before{
 
   padding-top: 0px;
   padding-bottom:20px;
+  padding-left: 20px;
+  padding-right: 20px;
 
 }

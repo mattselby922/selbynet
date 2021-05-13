@@ -49,26 +49,3 @@ function outputMessage(message){
   document.querySelector('.chatMessages').appendChild(div);
 }
 
-/*
-const socketio = require('socket.io');
-const server = http.createServer(app);
-const io = socketio(server);
-
-//Connection Listener
-io.on('connection', socket =>{
-  
-  //Emitter
-  socket.emit('message', 'You have arrived at Selbynet!');
-  
-  //Listening for chat message
-  socket.on('chatMessage', msg=>{
-    io.emit('message',msg);
-  });
-  
-  //Let everyone know that someone has connected
-  socket.broadcast.emit('message', 'Someone has connected.')
-  //Let everyone know that someone has disconnected
-  socket.on('disconnect', ()=>{
-    io.emit('message', 'Someone has left.');
-  });
-});*/
